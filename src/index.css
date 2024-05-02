@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .container {
+    @apply mx-auto max-w-full  px-3  sm:max-w-[540px]  md:max-w-[720px]  lg:max-w-[960px] xl:max-w-[1170px];
+  }
+
+  .leading-auto {
+    @apply /*  using arbitary values; line-height:normal  equivalent  of figma line-height:auto */ leading-[normal];
+  }
+  .form-group {
+    @apply mb-3;
+  }
+  /* .form-control {
+    @apply border-gray-light w-full rounded-[2px] border bg-transparent px-4 py-2  focus:border-secondary focus:shadow-md focus:outline-none;
+  } */
+  .btn{
+    @apply bg-secondary px-8 py-4 rounded-sm text-white
+  }
+  
+}
+
+/* mobile first  */
+/* @media(min-width:576px){
+    #box{
+        background-color: red;
+    }
+}
+@media(min-width:768px){
+    #box{
+        background-color: white;
+    }
+} */
+body{
+  /* background-color: #333; */
+}
+
+.box {
+  border: 1px solid;
+  height: 100px;
+  width: 100px;
+  margin-bottom: 2rem;
+}
+
+/* css specificity score
+      tag< class < id < <style-tag> < !importnat
+*/
+/* .slick-next
+{
+  display: none !important;
+} */
+
+* {
+  /* background-color: rgba(255,0,0,0.05); */
+}
+
+/* .container{
+    max-width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+} */
+
+/* 
+    #logo:hover{
+        transform: translate(10px ,-10px);
+        text-decoration: underline;
+        transition-property: all;
+        transition-duration: .5s;} 
+*/
