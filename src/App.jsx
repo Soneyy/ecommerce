@@ -1,117 +1,143 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import RootElement from "./Components/RootElement";
-// import Home from './pages/Home';
-// import './App.css'
-// import {
-//   createBrowserRouter,
-//   RouterProvider,
-//   Route,
-//   Link,
- 
-// } from "react-router-dom";
-
-// function App() {
-//   const router = createBrowserRouter([
-    
-//     {
-//       path:"/",
-//       element:<RootElement/>,
-//       children:[
-        
-//           {
-//             path: "/",
-//             element: (
-              
-//                 <h1>HomenPage</h1>
-             
-//             ),
-//           },
-//           {
-//             path: "about",
-//             element: <h1> About page</h1>
-//           },
-        
-//       ]
-//     }
-
-//   ]);
-//   return(
-//     <RouterProvider router={router} />
-  
-//   )
- 
- 
-  
-
-// }
-
-// export default App
-import React from 'react'
-import Home from './pages/Home'
-import Login from './pages/Login'
-
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-  Link,
-} from "react-router-dom";
+import React from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import RootComponent from './Components/common/RootComponent';
-import Product from './pages/products/Product';
-import Slug from './pages/products/Slug';
+import Home from './pages/Home';
+import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Cart from './pages/Cart';
+import Store from './pages/store';
+import AllProduct from './Components/home/AllProduct';
+import Productpage from './pages/all/Productpage';
+import Product from './pages/products/Product';
+import Slug from './pages/products/Slug';
+import SellerProducts from './pages/seller/Products';
+import AddProducts from './pages/seller/AddProducts';
+import { useEffect } from "react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setReduxUser } from "./redux/slice/userSlice";
+import { useState } from "react";
+import Cloth from"./pages/clothes/Cloth"
 
 const router = createBrowserRouter([
   {
-    path: "",
-    element: <RootComponent/>,
-    children:[
+    path: '',
+    element: <RootComponent />,
+    children: [
       {
-        path:"",
-        element: <Home/>
+        path: '',
+        element: <Home />,
       },
       {
-        path: "Login",
-        element: <Login/>
+        path: 'login',
+        element: <Login />,
       },
       {
-        path: "signup",
-        element: <Signup/>
+        path: 'signup',
+        element: <Signup />,
       },
       {
-        path: "cart",
-        element: <Cart/>
+        path: 'cart',
+        element: <Cart />,
       },
       {
-        path: "products",
-        
-        children:[
+        path: 'store',
+        element: <Store />,
+        children: [
           {
-            path:"",
-            element: <Product/>
+            path: "category/all",
+            element: <Store />,
+          },
+        ],
+      },
+      {
+        path: 'category/all',
+        children: [
+          {
+            path: ':productpage',
+            element: <Productpage />,
+          },
+          
+        ],
+      },
+      {
+        path: 'products',
+        children: [
+          {
+            path: '',
+            element: <Product />,
           },
           {
-            path:"slug",
-            element: <Slug/>
+            path: ':slug',
+            element: <Slug />,
           },
-        ]
+        ],
       },
-    ]
+      {
+        path: 'sellers',
+        children: [
+          {
+            path: 'products',
+            children: [
+              {
+                path: '',
+                element: <SellerProducts />,
+              },
+              {
+                path: 'add',
+                element: <AddProducts />,
+              },
+            ],
+          },
+          {
+            path: ':slug',
+            element: <Slug />,
+          },
+        ],
+      },
+    ],
   },
-
 ]);
 
+function App() {
+  const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+    let token = localStorage.getItem('token');
 
-function App ()  {
+    if (token) {
+      axios
+        .get('[GET] https://api.escuelajs.co/api/v1/users', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          dispatch(setReduxUser(res.data));
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          setIsLoading(false);
+        });
+    } else {
+      setIsLoading(false);
+    }
+  }, [dispatch]);
+
   return (
-    <div className='font-lato'> 
- <RouterProvider router={router} />
-    </div>
-  )
+    <>
+      {isLoading ? (
+        <div className="flex h-screen items-center justify-center">
+          is loading....
+        </div>
+      ) : (
+        <div className="font-lato">
+          <RouterProvider router={router} />
+        </div>
+      )}
+    </>
+  );
 }
 
-export default App
+export default App;

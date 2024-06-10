@@ -18,26 +18,17 @@ export default function Header() {
 
   return (
     <header>
-      <div className="bg-[#7E33E0]">
+      <div className="bg-[#544c5d]">
         <nav className="py-[14px] text-center font-josefin text-white container flex justify-between items-center">
-          <div>
-            <CiMail className="inline-block mr-2" />
-            sherpasoni59@gmail.com
-            <FiPhoneCall className="inline-block ml-10" />
-            (12345)67890
+          <div className="flex items-center">
+            <CiMail className="mr-2" />
+            <span className="mr-10">sherpasoni59@gmail.com</span>
+            <FiPhoneCall className="mr-2" />
+            <span>(12345)67890</span>
           </div>
 
           <div className="flex items-center">
-            <span className="flex items-center">
-              <span>English</span>
-              <IoIosArrowDown />
-            </span>
-            <span className="flex items-center font-bold ml-5">
-              <span>USD</span>
-              <IoIosArrowDown />
-            </span>
-
-            <span className="flex items-center">
+            <span className="flex items-center mr-5">
               {user ? (
                 <>
                   {JSON.stringify(user?.name)}
@@ -45,24 +36,21 @@ export default function Header() {
                     onClick={() => {
                       dispatch(logout());
                     }}
+                    className="ml-3 cursor-pointer"
                   >
                     logout
                   </span>
                 </>
               ) : (
-                <Link to={'/Login'}className="flex items-center ml-5">
+                <Link to={'/Login'} className="flex items-center">
                   Login <IoPersonOutline />
                 </Link>
               )}
             </span>
-            <span className="flex items-center ml-5">
-              Wishlist <CiHeart />
-            </span>
-            <span className="ml-7">
+            <span>
               <Link to={'/cart'} className="flex items-center">
-                {' '}
-                <FaShoppingCart /> ({cartItems.length})
-              </Link>{' '}
+                <FaShoppingCart className="mr-1" /> ({cartItems.length})
+              </Link>
             </span>
           </div>
         </nav>
@@ -74,25 +62,13 @@ export default function Header() {
             to="/"
             className="leading-auto inline-block border font-josefin text-[34px] font-semibold text-primary-dark hover:text-secondary"
           >
-            Hekto
+           Storew
           </Link>
           <Link to="/" className="text-secondary flex items-center ml-20">
-            Home <IoIosArrowDown />
+            Home <IoIosArrowDown className="ml-1" />
           </Link>
-          <a href="" className="hover:text-secondary ml-5">
-            Pages
-          </a>
-          <Link to="/products" className="hover:text-secondary ml-6">
-            Products
-          </Link>
-          <a href="" className="hover:text-secondary ml-7">
-            Blog
-          </a>
-          <a href="" className="hover:text-secondary ml-8">
-            Shop
-          </a>
-          <a href="" className="hover:text-secondary ml-9">
-            Contact
+          <a href="/store" className="hover:text-secondary ml-5">
+            Store
           </a>
           <form className="flex items-center ml-auto border-black">
             <input

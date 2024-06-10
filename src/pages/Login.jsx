@@ -22,7 +22,7 @@ export default function Login() {
   // }
 
   const [formData, setFormData] = useState({
-    email: "b@b.com",
+    email: "soni@.com",
     password: "password",
   });
 

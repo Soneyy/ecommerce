@@ -9,7 +9,7 @@ export const cartSlice = createSlice({
   reducers: {
     addCardItem: (state, action) => {
       
-      state.value = action.payload;
+      state.value.push(action.payload);
     },
     resetCart:(state, action) => {
         state.value=[]

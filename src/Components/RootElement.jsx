@@ -6,7 +6,7 @@ export default function RootElement() {
     <div>
         <header>
         <Link to="/">home</Link>
-        <Link to="/about">about</Link>
+        <Link to="/store">store</Link>
         </header>
         <Outlet/>
         <footer>Footer</footer>

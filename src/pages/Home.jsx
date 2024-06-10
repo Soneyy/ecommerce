@@ -1,183 +1,94 @@
 import React, { useState, useEffect } from "react";
-import { CiMail } from "react-icons/ci";
-import { FiPhoneCall } from "react-icons/fi";
-import { FaShoppingCart } from "react-icons/fa";
-import { IoIosArrowDown } from "react-icons/io";
-import { IoPersonOutline } from "react-icons/io5";
-import { CiHeart } from "react-icons/ci";
-import { IoSearch } from "react-icons/io5";
-import Header from "../Components/Header";
-import Banner from "../Components/home/Banner"
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import Product from "../Components/home/Product";
-import axios from "axios"
+import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import TrendingProduct from "../Components/home/TrendingProduct"
+import Product from"../Components/home/Product"
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const settings = {
+  const productSettings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
+    slidesToShow: 4, // Number of slides to show
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
-  let banners = [
-    {
-      background: "bg-banner-1",
-      label: "Best Furniture For Your Castle....",
-      heading: " New Furniture Collection Trends in 2020",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Magna in est adipiscing in phasellus non in justo.",
-      redirectUrl: "/blogs",
-    },
-    {
-      background: "bg-banner-2",
-      label: "Second Furniture For Your Castle....",
-      heading: " Second Furniture Collection Trends in 2020",
-      description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Magna in est adipiscing in phasellus non in justo.",
-      redirectUrl: "/offers",
-    },
-    {
-      background: "bg-banner-3",
-      label: "Third Furniture For Your Castle....",
-      heading: " Third Furniture Collection Trends in 2020",
-      description:
-        "Third ipsum dolor sit amet, consectetur adipiscing elit. Magna in est adipiscing in phasellus non in justo.",
-      redirectUrl: "/products",
-    },
-  ];
+
   useEffect(() => {
     axios
-      .get("https://ecommerce-sagartmg2.vercel.app/api/products/trending")
+      .get("https://api.escuelajs.co/api/v1/categories")
       .then((res) => {
         console.log(res);
-        setProducts(res.data.data);
+        setProducts(res.data.slice(0, 5)); // Limit to 5 products
         setIsLoading(false);
       })
-      .catch((err) => {});
-  }, []); // component did mount
+      .catch((err) => {
+        console.error(err);
+        setIsLoading(false);
+      });
+  }, []);
 
-  let latestProducts = [
-    {
-      image: "/assets/latestProduct1.png",
-      title: "Comfort Handy Craft",
-      currentPrice: "$200",
-      previousPrice: "$250",
-    },
-    {
-      image: "/assets/latestProduct2.png",
-      title: "Comfort Handy Craft 2",
-      currentPrice: "$200",
-      previousPrice: "$250",
-    },
-    {
-      image: "/assets/latestProduct3.png",
-      title: "Comfort Handy Craft 3",
-      currentPrice: "$200",
-      previousPrice: "$250",
-    },
-    {
-      image: "/assets/latestProduct4.png",
-      title: "Comfort Handy Craft 4",
-      currentPrice: "$200",
-      previousPrice: "$250",
-    },
-    {
-      image: "/assets/latestProduct5.png",
-      title: "Comfort Handy Craft 5",
-      currentPrice: "$200",
-      previousPrice: "$250",
-    },
-    {
-      image: "/assets/latestProduct6.png",
-      title: "Comfort Handy Craft 6",
-      currentPrice: "$200",
-      previousPrice: "$250",
-    },
-  ];
   return (
     <>
-    {/* {
-      JSON.stringify(products)
-    } */}
-    
-     <Slider {...settings}  >
-  {banners.map((el, index) => {
-    return (
-      <Banner
-        background={el.background}
-        label={el.label}
-        heading={el.heading}
-        description={el.description}
-       
-      />
-    );
-  })}
-</Slider>  
-<div className="container grid gap-4 py-[116px] sm:py-[130px] md:grid-cols-2 md:py-[148px] lg:grid-cols-4 lg:py-[166px] xl:py-[188px] xxl:py-[210px]">
-        {products.map((el) => {
-          return (
-            <Product
-              key={el._id}
-              _id={el._id}
-              name={el.name}
-              price={el.price}
-              image={el.image}
-            />
-          );
-        })}
-          {isLoading && (
+      <div className="container py-[116px] sm:py-[130px] md:py-[148px] lg:py-[166px] xl:py-[188px] xxl:py-[210px]">
+        <h1 className="flex justify-center items-center font-bold mb-8">Categories</h1>
+
+        {isLoading && (
           <>
-            <Skeleton className="h-[250px]" />
-            <Skeleton className="h-[250px]" />
-            <Skeleton className="h-[250px]" />
-            <Skeleton className="h-[250px]" />
+            <Skeleton className="h-[400px]" />
+            <Skeleton className="h-[400px]" />
+            <Skeleton className="h-[400px]" />
+            <Skeleton className="h-[400px]" />
           </>
         )}
-        {!isLoading && products.length == 0 && (
-          <>
-            <p>no products found</p>
-          </>
+        {!isLoading && products.length === 0 && <p>No products found</p>}
+        {!isLoading && products.length > 0 && (
+          <Slider {...productSettings} className="mt-4">
+            {products.map((el) => {
+              return (
+                <div key={el.id} className="container mb-14 mt-16"> {/* Add padding for gap */}
+                  <Product
+                    _id={el.id}
+                    name={el.name} // 
+                    creationAt={el.creationAt}
+                    image={el.image} // 
+                  />
+                </div>
+              );
+            })}
+          </Slider>
         )}
-        </div>
-         <div className="container mb-14 mt-16">
-        <p className="text-center text-[23px] font-bold text-[#151875] md:text-[42px]">
-          Latest Products
-        </p>
-        <div className="mt-5 flex justify-center gap-2 text-sm md:gap-4 md:text-[18px]">
-          <a href="" className="hover:text-secondary">
-            New Arrival
-          </a>
-          <a href="" className="hover:text-secondary">
-            Best Seller
-          </a>
-          <a href="" className="hover:text-secondary">
-            Featured
-          </a>
-          <a href="" className="hover:text-secondary">
-            Special Offer
-          </a>
-        </div>
-        <div className="mt-[32px] grid justify-items-center gap-4 sm:grid-cols-2 md:mt-[58px] md:grid-cols-3">
-          {latestProducts.map((el) => {
-            return (
-              <TrendingProduct
-                image={el.image}
-                title={el.title}
-                currentPrice={el.currentPrice}
-                previousPrice={el.previousPrice}
-              />
-            );
-          })}
-          </div>
       </div>
     </>
   );

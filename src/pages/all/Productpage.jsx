@@ -4,9 +4,9 @@ import { useParams } from "react-router-dom";
 import BreadCrumb from "../../Components/common/BreadCrumb";
 import { addCardItem } from "../../redux/slice/cartSlice.";
 import { useDispatch } from "react-redux";
-import { CiHeart } from "react-icons/ci";
 
-export default function Slug() {
+
+export default function Productpage() {
   const [product, setProduct] = useState(null); // Use null initially
   const [loading, setLoading] = useState(true); // Loading state
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ export default function Slug() {
 
   useEffect(() => {
     axios
-      .get(`https://api.escuelajs.co/api/v1/categories/${params.slug}`)
+      .get(`https://api.escuelajs.co/api/v1/products/${params.slug}`)
       .then((res) => {
         setProduct(res.data); // Assuming the data is directly in res.data
         setLoading(false);
@@ -39,7 +39,7 @@ export default function Slug() {
       <div className="container grid gap-4 p-6 shadow-xl md:grid-cols-2">
         {product.image ? (
           <img
-            src={product.image}
+            src={product.images}
             className="w-[100%] self-stretch object-cover"
           />
         ) : (
@@ -48,15 +48,15 @@ export default function Slug() {
 
         <div className="flex flex-grow flex-col gap-4 p-4">
           <p className="font-semibold text-[#0D134E] md:text-[36px]">
-            {product.name}
+            {product.title}
           </p>
 
           <p className="font-bold text-[#151875]">
-            creationAt: {product.creationAt}
+           {product.price}
           </p>
 
           <p className="font-bold text-[#FB2E86] ">
-            updatedAt: {product.updatedAt}
+            {product.description}
           </p>
 
           <div className="flex items-center justify-center gap-3">
