@@ -3,22 +3,33 @@ import { createSlice } from "@reduxjs/toolkit";
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    value: [], // to simulate as not logged in
-    // value: {"name":"ram"}
+    value: [],
   },
   reducers: {
-    addCardItem: (state, action) => {
-      
-      state.value.push(action.payload);
+    addCartItem: (state, action) => {
+      const existingItem = state.value.find(item => item.id === action.payload.id);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        state.value.push({ ...action.payload, quantity: 1 });
+      }
     },
-    resetCart:(state, action) => {
-        state.value=[]
-    }
-    
+    updateCartItemQuantity: (state, action) => {
+      const { id, quantity } = action.payload;
+      const cartItem = state.value.find((item) => item.id === id);
+      if (cartItem) {
+        cartItem.quantity = quantity;
+      }
+    },
+    resetCart: (state) => {
+      state.value = [];
+    },
+    removeCartItem: (state, action) => {
+      state.value = state.value.filter((item) => item.id !== action.payload);
+    },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { addCardItem, resetCart } = cartSlice.actions;
+export const { addCartItem, updateCartItemQuantity, resetCart ,removeCartItem} = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -1,23 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
+// userSlice.js
+import { createSlice } from '@reduxjs/toolkit';
 
 export const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState: {
-    value: null, // to simulate as not logged in
-    // value: {"name":"ram"}
+    isLoggedIn: false,
+    value: null, // or initial user data structure
   },
   reducers: {
-    setReduxUser: (state, action) => {
-      console.log("change redux store.");
+    login: (state, action) => {
+      state.isLoggedIn = true;
       state.value = action.payload;
     },
-    logout: (state, action) => {
+    logout: (state) => {
+      state.isLoggedIn = false;
       state.value = null;
+    },
+    setReduxUser: (state, action) => {
+      state.value = action.payload;
     },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { setReduxUser, logout } = userSlice.actions;
+export const { login, logout, setReduxUser } = userSlice.actions;
 
 export default userSlice.reducer;

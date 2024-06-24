@@ -5,17 +5,51 @@ import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import Product from"../Components/home/Product"
+import Product from "../Components/home/Product";
+import Banner from "../Components/home/Banner";
+import "../Components/home/Banner.css";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
+
+  const banners = [
+    {
+      background: "bg-banner-1", // Ensure these match your CSS classes
+      label: "Best ecommerce wesite",
+      heading: "The online store that's made to order",
+      description: "Make every aspect of ecommerce easier for you and your customer.",
+      
+    },
+    {
+      background: "bg-banner-2", // Ensure these match your CSS classes
+      label: "Best ecommerce wesite",
+      heading: "The online store that's made to order",
+      description: "Make every aspect of ecommerce easier for you and your customer.",
+     
+    },
+    {
+      background: "bg-banner-3", // Ensure these match your CSS classes
+      label: "Best ecommerce wesite",
+      heading: "The online store that's made to order",
+      description: "Make every aspect of ecommerce easier for you and your customer.",
+      
+    },
+  ];
+
   const productSettings = {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 4, // Number of slides to show
+    slidesToShow: 4,
     slidesToScroll: 1,
     responsive: [
       {
@@ -49,7 +83,6 @@ export default function Home() {
     axios
       .get("https://api.escuelajs.co/api/v1/categories")
       .then((res) => {
-        console.log(res);
         setProducts(res.data.slice(0, 5)); // Limit to 5 products
         setIsLoading(false);
       })
@@ -60,9 +93,24 @@ export default function Home() {
   }, []);
 
   return (
-    <>
-      <div className="container py-[116px] sm:py-[130px] md:py-[148px] lg:py-[166px] xl:py-[188px] xxl:py-[210px]">
-        <h1 className="flex justify-center items-center font-bold mb-8">Categories</h1>
+    <div className="w-full min-h-screen ">
+      <Slider {...settings}>
+        {banners.map((el, index) => (
+          <Banner
+            key={index}
+            background={el.background}
+            label={el.label}
+            heading={el.heading}
+            description={el.description}
+            
+          />
+        ))}
+      </Slider>
+
+      <div className="container mx-auto sm:py-12 md:py-16 lg:py-20 xl:py-24 xxl:py-28">
+        <h1 className="flex justify-center items-center font-bold mb-8 text-[34px] text-secondary-200">
+          Categories
+        </h1>
 
         {isLoading && (
           <>
@@ -75,21 +123,14 @@ export default function Home() {
         {!isLoading && products.length === 0 && <p>No products found</p>}
         {!isLoading && products.length > 0 && (
           <Slider {...productSettings} className="mt-4">
-            {products.map((el) => {
-              return (
-                <div key={el.id} className="container mb-14 mt-16"> {/* Add padding for gap */}
-                  <Product
-                    _id={el.id}
-                    name={el.name} // 
-                    creationAt={el.creationAt}
-                    image={el.image} // 
-                  />
-                </div>
-              );
-            })}
+            {products.map((el) => (
+              <div key={el.id} className="container mb-14 mt-16 font-bold">
+                <Product _id={el.id} name={el.name} image={el.image} />
+              </div>
+            ))}
           </Slider>
         )}
       </div>
-    </>
+    </div>
   );
 }

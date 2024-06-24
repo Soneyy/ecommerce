@@ -2,9 +2,11 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import BreadCrumb from "../../Components/common/BreadCrumb";
-import { addCardItem } from "../../redux/slice/cartSlice.";
+import { addCartItem } from "../../redux/slice/cartSlice."; 
 import { useDispatch } from "react-redux";
 import { CiHeart } from "react-icons/ci";
+import {FaInstagram, FaFacebook, FaTwitterSquare  } from "react-icons/fa";
+
 
 export default function Slug() {
   const [product, setProduct] = useState(null); // Use null initially
@@ -46,35 +48,27 @@ export default function Slug() {
           <p>No image available</p>
         )}
 
-        <div className="flex flex-grow flex-col gap-4 p-4">
-          <p className="font-semibold text-[#0D134E] md:text-[36px]">
+<div className="flex flex-grow flex-col gap-9 p-4">
+<p className="font-semibold text-[#0D134E] text-[36px] md:text-[48px]">
             {product.name}
           </p>
 
-          <p className="font-bold text-[#151875]">
+          <p className="font-bold text-[#151875] text-[24px]">
             creationAt: {product.creationAt}
           </p>
 
-          <p className="font-bold text-[#FB2E86] ">
+          <p className="font-bold text-[#FB2E86] text-[24px] ">
             updatedAt: {product.updatedAt}
           </p>
 
-          <div className="flex items-center justify-center gap-3">
-            <button
-              onClick={() => dispatch(addCardItem(product))}
-              className="bg-primary  hover:bg-pink-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline  w-40"
-            >
-              Add To cart
-            </button>
-          </div>
-
+          
          
-          <div className="flex gap-4 font-semibold text-[#151875]">
-            <p>Share </p>
+          <div className="flex items-center gap-4 font-semibold text-[#151875]">
+          <p>Share:</p>
             <div className="flex gap-2 p-2">
-              <img src="/assets/fbicon.png" alt="" />
-              <img src="/assets/instaLogo.png" alt="" />
-              <img src="/assets/twitterLogo.png" alt="" />
+            <FaInstagram className="text-pink-500 text-[24px]" />
+              <FaFacebook className="text-blue-600 text-[24px]" />
+              <FaTwitterSquare className="text-blue-400 text-[24px]" />
             </div>
           </div>
         </div>

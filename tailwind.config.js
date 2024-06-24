@@ -10,24 +10,22 @@ export default {
         lato: ['"Lato"', ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: "#7E33E0",
+        primary: "#544c5d",
         "primary-dark": "#0D0E43",
         "primary-light": "#E7E6EF",
-        secondary: "#FB2E86",
+        secondary: {
+          100: "#FB2E86",
+          200: "#a78bfa",
+          300:"#9333ea"
+        },
       },
       screens: {
-        /* we should start with mobile. */
         sm: "576px", // mobile landscape mode
         md: "768px", // tablet
-        lg: "1024px", // latptop without side numerical in keypad
-        xl: "1280px", // normal desktop 188
-        xxl: "1400px", // huge monitor  210
+        lg: "1024px", // laptop without side numerical keypad
+        xl: "1280px", // normal desktop
+        xxl: "1400px", // huge monitor
       },
-      backgroundImage: {
-        'banner-1': "url('/assets/banner-1.png')",
-        'banner-2': "url('/assets/banner-2.png')",
-        'banner-3': "url('/assets/banner-3.png')",
-      }
     },
   },
   plugins: [],

@@ -1,96 +1,82 @@
-import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import RootComponent from './Components/common/RootComponent';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import Cart from './pages/Cart';
-import Store from './pages/store';
-import AllProduct from './Components/home/AllProduct';
-import Productpage from './pages/all/Productpage';
-import Product from './pages/products/Product';
-import Slug from './pages/products/Slug';
-import SellerProducts from './pages/seller/Products';
-import AddProducts from './pages/seller/AddProducts';
-import { useEffect } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import axios from "axios";
 import { setReduxUser } from "./redux/slice/userSlice";
-import { useState } from "react";
-import Cloth from"./pages/clothes/Cloth"
+import RootComponent from "./Components/common/RootComponent";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Cart from "./pages/Cart";
+import Store from "./pages/store";
+
+import Productpage from "./pages/all/Productpage";
+import Product from "./pages/products/Product";
+import Slug from "./pages/products/Slug";
+import AllProduct from "./Components/home/AllProduct";
+import Profile from "./pages/Profile";
+import ForgetPassword from "./pages/Forgetpassword";
+import Payment from "./pages/Payment";
+import WishlistPage from "./pages/WishlistPage";
 
 const router = createBrowserRouter([
   {
-    path: '',
+    path: "/",
     element: <RootComponent />,
     children: [
       {
-        path: '',
+        path: "",
         element: <Home />,
       },
       {
-        path: 'login',
+        path: "login",
         element: <Login />,
       },
       {
-        path: 'signup',
+        path: "signup",
         element: <Signup />,
       },
       {
-        path: 'cart',
+        path: "cart",
         element: <Cart />,
       },
       {
-        path: 'store',
+        path: "store",
         element: <Store />,
-        children: [
-          {
-            path: "category/all",
-            element: <Store />,
-          },
-        ],
       },
       {
-        path: 'category/all',
-        children: [
-          {
-            path: ':productpage',
-            element: <Productpage />,
-          },
-          
-        ],
+        path: "profile",
+        element: <Profile />,
       },
       {
-        path: 'products',
+        path: "forgetpassword",
+        element: <ForgetPassword />,
+      },
+      {
+        path: "paymentgateway",
+        element: <Payment />,
+      },
+      {
+        path: "wishlist",
+        element: <WishlistPage/>,
+      },
+      {
+        path: "store/category/all",
+        element: <AllProduct />,
+      },
+      {
+        path: "category/all/:productpage",
+        element: <Productpage />,
+      },
+      {
+        path: "products",
         children: [
           {
-            path: '',
+            path: "",
             element: <Product />,
           },
           {
-            path: ':slug',
-            element: <Slug />,
-          },
-        ],
-      },
-      {
-        path: 'sellers',
-        children: [
-          {
-            path: 'products',
-            children: [
-              {
-                path: '',
-                element: <SellerProducts />,
-              },
-              {
-                path: 'add',
-                element: <AddProducts />,
-              },
-            ],
-          },
-          {
-            path: ':slug',
+            path: ":slug",
             element: <Slug />,
           },
         ],
@@ -104,20 +90,26 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
 
-    if (token) {
+    if (user) {
+      dispatch(setReduxUser(JSON.parse(user)));
+      setIsLoading(false);
+    } else if (token) {
       axios
-        .get('[GET] https://api.escuelajs.co/api/v1/users', {
+        .get("https://api.escuelajs.co/api/v1/auth/profile", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then((res) => {
           dispatch(setReduxUser(res.data));
+          localStorage.setItem("user", JSON.stringify(res.data)); // Store user data in localStorage
           setIsLoading(false);
         })
         .catch((err) => {
+          console.error("Failed to fetch profile:", err);
           setIsLoading(false);
         });
     } else {

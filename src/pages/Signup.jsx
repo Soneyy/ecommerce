@@ -1,55 +1,53 @@
 import React, { useState } from "react";
-// import footerImg from "/assets/loginFooter.png";
 import BreadCrumb from "../Components/common/BreadCrumb";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ErrorMessage from "../Components/common/ErrorMessage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Signup() {
-
-  const navigate = useNavigate()
-
-  const [formError, setFormError] = useState({
-    // name: "requried",
-    // email: "already used",
-  });
-
+  const navigate = useNavigate();
+  const [formError, setFormError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
-    setFormError({})
+    setFormError({}); // Reset form errors
+
     axios
-      .post("https://ecommerce-sagartmg2.vercel.app/api/users/signup", {
+      .post("https://api.escuelajs.co/api/v1/users", {
         name: e.target.name.value,
         email: e.target.email.value,
         password: e.target.password.value,
-        role: e.target.role.value,
+        avatar: e.target.avatar.value,
       })
       .then((res) => {
-        toast.success("success");
+        toast.success("Success");
         setIsLoading(false);
-        navigate('/login')
+        navigate("/login");
       })
       .catch((err) => {
-        console.log(err);
-
         if (err.response?.status === 400) {
-          console.log(err.response.data.errors);
-          toast.error("bad request");
-
+          const errorMessages = err.response.data.message;
           let errorsObj = {};
 
-          err.response.data.errors.forEach((element) => {
-            errorsObj[element.param] = element.msg;
+          errorMessages.forEach((error) => {
+            if (error.includes("email")) {
+              errorsObj.email = error;
+            } else if (error.includes("name")) {
+              errorsObj.name = error;
+            } else if (error.includes("password")) {
+              errorsObj.password = error;
+            } else if (error.includes("avatar")) {
+              errorsObj.avatar = error;
+            }
           });
 
           setFormError(errorsObj);
-        }else{
-          toast.error("someting went wrong. try agin later.")
+        } else {
+          toast.error("Something went wrong. Try again later.");
         }
 
         setIsLoading(false);
@@ -58,78 +56,80 @@ export default function Signup() {
 
   return (
     <>
-      <BreadCrumb />
-      <div className="mx-auto mt-[67px] flex w-[302px] items-center justify-center p-[28px] shadow-lg md:w-[544px]">
-        <div className="space-y-2 p-[24px] font-lato  ">
-          <div>
-            <h1 className="font-Josefin mb-0 text-center text-[32px] font-bold">
-              Signup
-            </h1>
-            <p className="mt-0 text-center text-[15px] text-[#9096B2]">
-              Please login using account detail bellow.
+      <BreadCrumb title="Signup" />
+      <div className="mx-auto mt-20 flex items-center justify-center p-8 shadow-lg max-w-lg">
+        <div className="space-y-4">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-2">Signup</h1>
+            <p className="text-sm text-gray-600">
+              Please sign up using the details below.
             </p>
           </div>
 
-          <form className="" onSubmit={handleSubmit}>
-            <div className="form-group">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
               <input
                 name="name"
-                className="form-control"
+                className="w-full px-4 py-2 border border-gray-300 rounded"
                 type="text"
                 placeholder="Name"
               />
-              <ErrorMessage msg={formError.name} />
+              {formError.name && <ErrorMessage msg={formError.name} />}
             </div>
-            <div className="form-group">
+            <div>
               <input
-                className="form-control"
-                type="email"
                 name="email"
+                className="w-full px-4 py-2 border border-gray-300 rounded"
+                type="email"
                 placeholder="Email Address"
               />
-              <ErrorMessage msg={formError.email} />
+              {formError.email && <ErrorMessage msg={formError.email} />}
             </div>
-            <div className="form-group">
+            <div>
               <input
                 name="password"
-                className="form-control"
+                className="w-full px-4 py-2 border border-gray-300 rounded"
                 type="password"
                 placeholder="Password"
               />
-              <ErrorMessage msg={formError.password} />
+              {formError.password && <ErrorMessage msg={formError.password} />}
             </div>
-            <div className="form-group">
-              <select
-                placeholder="Role"
-                className="form-control"
-                name="role"
-                id=""
+            <div className="mb-4">
+              <input
+                className="w-full p-2 border border-gray-300 rounded"
+                type="text"
+                name="avatar"
+                placeholder="Avatar URL (optional)"
+              />
+              {formError.avatar && <ErrorMessage msg={formError.avatar} />}
+            </div>
+            <div>
+              <Link
+                to="/forgetPassword"
+                className="block text-sm text-blue-500 hover:underline"
               >
-                <option value="">Select Role</option>
-                <option value="seller">seller</option>
-                <option value="buyer">buyer</option>
-              </select>
-              <ErrorMessage msg={formError.role} />
+                Forgot Your Password?
+              </Link>
             </div>
-            <a href="/forgetPassword" className="text-sm text-[#9096B2]">
-              Forget Your Password ?
-            </a>
-            <button disabled={isLoading} type="submit" className="btn w-full">
-              {isLoading ? "loading..." : "sign up"}
+            <button
+              disabled={isLoading}
+              type="submit"
+              className="w-full bg-secondary-300 text-white px-4 py-2 rounded hover:bg-secondary-200"
+            >
+              {isLoading ? "Loading..." : "Sign Up"}
             </button>
           </form>
 
-          <p className="text-gray-light">
-            Don’t have an Account?
-            <a href="/Signup" className="text-[#558cf3]">
-              Create account
-            </a>
+          <p className="text-sm text-gray-600 mt-4 text-center">
+            Already have an Account?{" "}
+            <Link to="/login" className="text-secondary-200 hover:underline">
+              Log in
+            </Link>
           </p>
         </div>
       </div>
-      {/* <img src={footerImg} className="container my-[40px]" /> */}
+
       <ToastContainer theme="colored" />
     </>
   );
 }
-``;

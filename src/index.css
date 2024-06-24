@@ -20,7 +20,7 @@
     @apply border-gray-light w-full rounded-[2px] border bg-transparent px-4 py-2  focus:border-secondary focus:shadow-md focus:outline-none;
   } */
   .btn{
-    @apply bg-secondary px-8 py-4 rounded-sm text-white
+    @apply bg-secondary-300 px-8 py-4 rounded-sm text-white
   }
   
 }
