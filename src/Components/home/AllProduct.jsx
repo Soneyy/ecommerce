@@ -2,28 +2,26 @@ import React from "react";
 import { FaCartPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { addCartItem } from "../../redux/slice/cartSlice."; // Corrected import
-import { addToWishlist } from "../../redux/slice/wishlistsSlice"; // Import addToWishlist action
-import { Useauth } from "../hook/Useauth"; // Import useAuth hook
-import { toast } from "react-toastify"; // Optionally import toast for notifications
+import { addCartItem } from "../../redux/slice/cartSlice.";
+import { addToWishlist, removeFromWishlist } from "../../redux/slice/wishlistsSlice";
+import { Useauth } from "../hook/Useauth";
+import { toast } from "react-toastify";
 import { BsSuitHeartFill } from "react-icons/bs";
-import { AiOutlineHeart, AiOutlineZoomIn } from "react-icons/ai";
-import { GiReturnArrow } from "react-icons/gi";
 import { MdOutlineLabelImportant } from "react-icons/md";
 
 export default function AllProduct(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { isLoggedIn } = Useauth(); // Use Useauth hook
+  const { isLoggedIn } = Useauth(); 
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     if (isLoggedIn) {
-      dispatch(addCartItem(props)); // Corrected action
-      toast.success("Item added to cart"); // Optional: show success message
+      dispatch(addCartItem(props)); // Dispatch action with product details
+      toast.success("Item added to cart");
     } else {
-      toast.error("You need to be logged in to add items to the cart"); // Optional: show error message
-      navigate("/login"); // Redirect to login page if not logged in
+      toast.error("You need to be logged in to add items to the cart");
+      navigate("/login");
     }
   };
 
@@ -32,18 +30,21 @@ export default function AllProduct(props) {
   };
 
   const handleAddToWishlist = (e) => {
-    e.stopPropagation(); // Stop event propagation
-    dispatch(addToWishlist(props)); // Dispatch addToWishlist action
-    toast.success('Item added to wishlist'); // Optional: show success message
+    e.stopPropagation();
+    if (isLoggedIn) {
+      dispatch(addToWishlist(props)); // Dispatch action with product details
+      toast.success("Item added to wishlist");
+    } else {
+      toast.error("You need to be logged in to add items to the wishlist");
+      navigate("/login");
+    }
   };
 
-  const handleRemoveFromWishlist = (e) => {
-    e.stopPropagation(); // Stop event propagation
-    dispatch(removeFromWishlist(props._id)); // Dispatch removeFromWishlist action
-    toast.success('Item removed from wishlist'); // Optional: show success message
-    props.handleRemoveFromWishlist();
+  const handleRemoveFromWishlist = () => {
+    if (props.showRemoveFromWishlist && props.handleRemoveFromWishlist) {
+      props.handleRemoveFromWishlist(props._id); // Pass the item ID to remove from wishlist
+    }
   };
-
 
   return (
     <div

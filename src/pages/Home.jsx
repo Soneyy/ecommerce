@@ -23,23 +23,23 @@ export default function Home() {
 
   const banners = [
     {
-      background: "bg-banner-1", // Ensure these match your CSS classes
-      label: "Best ecommerce wesite",
-      heading: "The online store that's made to order",
+      background: "bg-banner-2", // Ensure these match your CSS classes
+      label: "Best ecommerce website",
+      heading: "online business ",
       description: "Make every aspect of ecommerce easier for you and your customer.",
       
     },
     {
-      background: "bg-banner-2", // Ensure these match your CSS classes
-      label: "Best ecommerce wesite",
-      heading: "The online store that's made to order",
+      background: "bg-banner-1", // Ensure these match your CSS classes
+      label: "Best ecommerce website",
+      heading: "online business",
       description: "Make every aspect of ecommerce easier for you and your customer.",
      
     },
     {
       background: "bg-banner-3", // Ensure these match your CSS classes
-      label: "Best ecommerce wesite",
-      heading: "The online store that's made to order",
+      label: "Best ecommerce website",
+      heading: "online business",
       description: "Make every aspect of ecommerce easier for you and your customer.",
       
     },
@@ -93,7 +93,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="w-full min-h-screen ">
+    <div className="w-half h-full  ">
       <Slider {...settings}>
         {banners.map((el, index) => (
           <Banner

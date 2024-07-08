@@ -9,5 +9,6 @@ export default configureStore({
     user: userReducer,
     cart: cartReducer,
     wishlist: wishlistReducer,
+ 
   }
 })

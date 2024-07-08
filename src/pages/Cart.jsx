@@ -4,27 +4,25 @@ import {
   resetCart,
   removeCartItem,
   updateCartItemQuantity,
-} from "../redux/slice/cartSlice."; // Ensure correct path for cart actions
-import BreadCrumb from "../Components/common/BreadCrumb";
+  
+} from "../redux/slice/cartSlice."; 
 import { RiDeleteBinLine } from "react-icons/ri";
-import { Link, useNavigate } from "react-router-dom";
-import { Useauth } from "../Components/hook/Useauth"; // Ensure correct path for Useauth
-import { motion } from "framer-motion"; // Import motion for animations
+import { Link } from "react-router-dom";
+import { Useauth } from "../Components/hook/Useauth"; 
 import emptyCart from "../assets/emptyCart.png";
 
+import BreadCrumb from "../Components/common/BreadCrumb";
 
 const Cart = () => {
   const cartItems = useSelector((reduxStore) => reduxStore.cart.value);
   const dispatch = useDispatch();
-  const navigate = useNavigate(); // For navigation
-  const { isLoggedIn } = Useauth(); // Custom hook to check authentication
-
-  // Calculate total amount
+  const { isLoggedIn } = Useauth(); 
+  
   const totalAmt = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const shippingCharge = 10; // Sample shipping charge
+  const shippingCharge = 10; 
 
   const handleQuantityChange = (id, newQuantity) => {
     if (newQuantity > 0) {
@@ -40,18 +38,12 @@ const Cart = () => {
     dispatch(removeCartItem(id));
   };
 
-  if (!isLoggedIn) {
-    return (
-      <div className="container mx-auto text-center">
-        <BreadCrumb title="Shopping Cart" />
-        <p className="mt-4">Please log in to view your cart items.</p>
-      </div>
-    );
-  }
-
   return (
     <>
-      <BreadCrumb title="Shopping Cart" />
+      {/* Breadcrumb */}
+
+      <BreadCrumb title="Card" />
+
       <div className="container mx-auto">
         {cartItems.length > 0 ? (
           <>
@@ -151,7 +143,7 @@ const Cart = () => {
             <img
               src={emptyCart} // Make sure you have imported or defined `emptyCart` image
               alt="Empty Cart"
-              className="w-80 rounded-lg p-4"
+              className="w-40 h-auto rounded-lg p-4"
             />
             <div className="max-w-[500px] p-4 py-8 bg-white flex gap-4 flex-col items-center rounded-md shadow-lg">
               <h1 className="font-titleFont text-xl font-bold uppercase">

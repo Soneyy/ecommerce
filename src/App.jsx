@@ -18,6 +18,14 @@ import Profile from "./pages/Profile";
 import ForgetPassword from "./pages/Forgetpassword";
 import Payment from "./pages/Payment";
 import WishlistPage from "./pages/WishlistPage";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Admin from "./pages/admin/Admin";
+import Users from "./pages/admin/Users";
+import Orders from "./pages/admin/Orders";
+import Products from "./pages/admin/Products";
+
+import Aprofile from "./pages/admin/Aprofile";
 
 const router = createBrowserRouter([
   {
@@ -61,9 +69,19 @@ const router = createBrowserRouter([
         element: <WishlistPage/>,
       },
       {
+        path: "about",
+        element: <About/>,
+      },
+      {
+        path: "contact",
+        element: <Contact/>,
+      },
+      
+      {
         path: "store/category/all",
         element: <AllProduct />,
       },
+      
       {
         path: "category/all/:productpage",
         element: <Productpage />,
@@ -80,6 +98,37 @@ const router = createBrowserRouter([
             element: <Slug />,
           },
         ],
+      },
+    ],
+  },
+  {
+    path: "admin",
+   
+    children: [
+      {
+        path: "",
+        element: <Admin/>,
+      },
+      
+      {
+        path: "dashboard",
+        element: <Admin/>,
+      },
+      {
+        path: "users",
+        element: <Users />,
+      },
+      {
+        path: "orders",
+        element: <Orders/>,
+      },
+      {
+        path: "products",
+        element: <Products />,
+      },
+      {
+        path: "profile",
+        element: <Aprofile />,
       },
     ],
   },

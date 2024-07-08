@@ -9,8 +9,8 @@ import {FaInstagram, FaFacebook, FaTwitterSquare  } from "react-icons/fa";
 
 
 export default function Slug() {
-  const [product, setProduct] = useState(null); // Use null initially
-  const [loading, setLoading] = useState(true); // Loading state
+  const [product, setProduct] = useState(null); 
+  const [loading, setLoading] = useState(true); 
   const dispatch = useDispatch();
   const params = useParams();
 
@@ -18,7 +18,7 @@ export default function Slug() {
     axios
       .get(`https://api.escuelajs.co/api/v1/categories/${params.slug}`)
       .then((res) => {
-        setProduct(res.data); // Assuming the data is directly in res.data
+        setProduct(res.data); 
         setLoading(false);
       })
       .catch((err) => {
@@ -28,11 +28,11 @@ export default function Slug() {
   }, [params.slug]);
 
   if (loading) {
-    return <p>Loading...</p>; // Loading message
+    return <p>Loading...</p>; 
   }
 
   if (!product) {
-    return <p>Product not found</p>; // Handle case where product is not found
+    return <p>Product not found</p>; 
   }
 
   return (

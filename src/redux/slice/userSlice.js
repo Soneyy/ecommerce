@@ -1,11 +1,12 @@
-// userSlice.js
 import { createSlice } from '@reduxjs/toolkit';
+import { resetWishlist } from './wishlistsSlice';
 
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
     isLoggedIn: false,
-    value: null, // or initial user data structure
+    users: [], 
+    value: null, 
   },
   reducers: {
     login: (state, action) => {
@@ -19,9 +20,25 @@ export const userSlice = createSlice({
     setReduxUser: (state, action) => {
       state.value = action.payload;
     },
+    updateUser: (state, action) => {
+      const updatedUser = action.payload;
+      const index = state.users.findIndex(user => user.id === updatedUser.id);
+      if (index !== -1) {
+        state.users[index] = updatedUser;
+      }
+    },
+    removeUser: (state, action) => {
+      const userId = action.payload;
+      state.users = state.users.filter(user => user.id !== userId);
+    },
   },
 });
 
-export const { login, logout, setReduxUser } = userSlice.actions;
+export const { login, logout, setReduxUser, updateUser,removeUser } = userSlice.actions;
+
+export const logoutUser = () => dispatch => {
+  dispatch(logout());
+  dispatch(resetWishlist());
+};
 
 export default userSlice.reducer;

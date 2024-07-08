@@ -6,8 +6,8 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import AllProduct from "../Components/home/AllProduct";
 import Pagination from "../Components/common/Pagination";
-import { addCartItem } from "../redux/slice/cartSlice."; // Corrected import
-import { useDispatch } from "react-redux"; // Import useDispatch hook
+import { addCartItem } from "../redux/slice/cartSlice.";
+import { useDispatch } from "react-redux";
 
 const Store = () => {
   let [searchParams, setSearchParams] = useSearchParams();
@@ -16,7 +16,8 @@ const Store = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
-  const dispatch = useDispatch(); // Initialize useDispatch hook
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -47,7 +48,6 @@ const Store = () => {
   }, [categoryId, page]);
 
   const handleAddToCart = (productId) => {
-    // Dispatch addCartItem action with productId payload
     dispatch(addCartItem({ id: productId }));
   };
 
@@ -56,7 +56,7 @@ const Store = () => {
       <Sidebar className="w-64 bg-gray-200 p-4 fixed h-half" />
       <div className="flex-1 ml-50 p-8">
         <div className="container mx-auto">
-          <h1 className="text-center font-bold text-2xl mb-8">
+          <h1 className=" text-secondary-200 text-center font-bold text-2xl mb-8">
             Products in Category {categoryId}
           </h1>
 
@@ -87,7 +87,7 @@ const Store = () => {
                       price={el.price}
                       description={el.description}
                       image={el.images[0]}
-                      onAddToCart={() => handleAddToCart(el.id)} // Pass addCartItem function
+                      onAddToCart={() => handleAddToCart(el.id)}
                     />
                   </div>
                 ))}

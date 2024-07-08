@@ -3,26 +3,43 @@ import { CiMail, CiHeart } from 'react-icons/ci';
 import { FiPhoneCall } from 'react-icons/fi';
 import { FaShoppingCart } from 'react-icons/fa';
 import { IoSearch, IoPersonOutline, IoChevronDown, IoChevronUp } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/slice/userSlice';
+import { logout, logoutUser } from '../redux/slice/userSlice';
 
-export default function Header() {
+const Header = () => {
   const user = useSelector((store) => store.user.value);
   const cartItems = useSelector((store) => store.cart.value);
-  const wishlistItems = useSelector((store) => store.wishlist.wishlistItems) || []; // Ensure wishlistItems is initialized as an empty array
+  const wishlistItems = useSelector((store) => store.wishlist.wishlistItems) || [];
   const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const location = useLocation();
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Clear token or any relevant stored data
-    localStorage.removeItem('user'); // Clear stored user data
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     dispatch(logout());
+    dispatch(logoutUser());
   };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    
+    console.log('Search term:', searchTerm);
+  };
+
+  const linkClass = (path) => (
+    location.pathname === path ? 'text-primary font-bold' : 'text-secondary-200 hover:text-primary'
+  );
 
   return (
     <header>
@@ -36,7 +53,7 @@ export default function Header() {
           </div>
 
           <div className="flex items-center ml-auto space-x-5">
-            {user && (
+            {user && !user.isAdmin && ( 
               <div className="relative flex items-center mr-5">
                 {user.avatar && (
                   <img
@@ -51,13 +68,13 @@ export default function Header() {
                 {isDropdownOpen ? <IoChevronUp onClick={toggleDropdown} className="cursor-pointer" /> : <IoChevronDown onClick={toggleDropdown} className="cursor-pointer" />}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-10 w-48 bg-white rounded-md shadow-lg z-10">
-                    <Link
+                    <NavLink
                       to="/profile"
                       className="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                       onClick={() => setIsDropdownOpen(false)}
                     >
                       Profile
-                    </Link>
+                    </NavLink>
                     <Link
                       to="/"
                       onClick={handleLogout}
@@ -69,12 +86,12 @@ export default function Header() {
                 )}
               </div>
             )}
-             <Link to="/wishlist" className="flex items-center">
-              Wishlist <CiHeart className="ml-1" /> ({wishlistItems.length})
+            <Link to="/wishlist" className="flex items-center">
+              Wishlist <CiHeart className="ml-1" /> {wishlistItems.length > 0 && wishlistItems.length}
             </Link>
             <Link to="/cart" className="flex items-center">
               <FaShoppingCart className="mr-1" />
-              {user && `(${cartItems.length})`}
+              {user && !user.isAdmin && `(${cartItems.length})`} 
             </Link>
             {!user && (
               <Link to="/login" className="flex items-center">
@@ -93,29 +110,50 @@ export default function Header() {
           >
             Storew
           </Link>
-          <Link
+          <NavLink
             to="/"
-            className="text-secondary-200 hover:text-primary flex items-center ml-20 font-bold text-[20px]"
+            className={`flex items-center ml-20 text-[20px] ${linkClass('/')}`}
+            activeClassName="text-primary font-bold" 
           >
             Home
-          </Link>
-          <Link
+          </NavLink>
+          <NavLink
             to="/store"
-            className="text-primary hover:text-secondary-200 ml-8 font-bold text-[20px]"
+            className={`ml-8 text-[20px] ${linkClass('/store')}`}
+            activeClassName="text-primary font-bold" 
           >
             Store
-          </Link>
-          <form className="flex items-center ml-auto border-black">
+          </NavLink>
+          <NavLink
+            to="/about"
+            className={`ml-8 text-[20px] ${linkClass('/about')}`}
+            activeClassName="text-primary font-bold" 
+          >
+            About
+          </NavLink>
+          <NavLink
+            to="/contact"
+            className={`ml-8 text-[20px] ${linkClass('/contact')}`}
+            activeClassName="text-primary font-bold" 
+          >
+            Contact
+          </NavLink>
+          <form onSubmit={handleSearchSubmit} className="flex items-center ml-auto border-black">
             <input
               type="text"
-              className="focus:border-secondary flex focus:transition-all focus:outline-none border border-primary-light"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="focus:border-secondary flex focus:transition-all focus:outline-none border border-primary-light px-2 py-1"
+              placeholder="Search..."
             />
-            <button className="bg-secondary px-2 h-6">
-              <IoSearch className="text-white" />
+            <button type="submit" className="bg-secondary px-2 h-10 flex items-center justify-center">
+              <IoSearch  />
             </button>
           </form>
         </nav>
       </div>
     </header>
   );
-}
+};
+
+export default Header;

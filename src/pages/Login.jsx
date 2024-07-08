@@ -36,10 +36,20 @@ export default function Login() {
         });
       })
       .then((userRes) => {
+        const userData = userRes.data;
+
+        // Store user data in localStorage
+        localStorage.setItem("user", JSON.stringify(userData));
+
         toast.success("Login Successful");
-        dispatch(login(userRes.data)); // Dispatch login action with user data
-        localStorage.setItem("user", JSON.stringify(userRes.data)); // Store user data in localStorage
-        navigate("/profile"); // Redirect to profile page after login
+        dispatch(login(userData)); // Dispatch login action with user data
+
+        // Check if user is admin
+        if (userData.role === "admin") {
+          navigate("/admin"); // Redirect to admin page
+        } else {
+          navigate("/profile"); // Redirect to profile page after login
+        }
       })
       .catch((err) => {
         console.error("Login error:", err);

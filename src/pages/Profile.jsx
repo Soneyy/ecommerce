@@ -8,9 +8,9 @@ import { toast } from 'react-toastify';
 const Profile = () => {
   const user = useSelector((state) => state.user.value);
   const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    avatar: user?.avatar || '',
+    name: '',
+    email: '',
+    avatar: '',
   });
   const dispatch = useDispatch();
 
@@ -18,17 +18,11 @@ const Profile = () => {
     if (!user) {
       fetchUserProfile();
     } else {
-      // Initialize formData from localStorage if available
-      const storedData = JSON.parse(localStorage.getItem('formData'));
-      if (storedData) {
-        setFormData(storedData);
-      } else {
-        setFormData({
-          name: user.name || '',
-          email: user.email || '',
-          avatar: user.avatar || '',
-        });
-      }
+      setFormData({
+        name: user.name || '',
+        email: user.email || '',
+        avatar: user.avatar || '',
+      });
     }
   }, [user]);
 
@@ -54,14 +48,16 @@ const Profile = () => {
       .then((res) => {
         toast.success('Profile updated successfully');
         dispatch(setReduxUser(res.data));
-        // Update local storage with updated formData
-        localStorage.setItem('formData', JSON.stringify(formData));
       })
       .catch((err) => {
         console.error('Update error:', err);
         toast.error('Something went wrong. Try again later.');
       });
   };
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

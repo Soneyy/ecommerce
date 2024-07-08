@@ -1,7 +1,9 @@
 import React, { useContext, createContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ChevronLast, ChevronFirst } from "lucide-react";
 import axios from "axios";
+import { RiDashboardLine, RiUserLine, RiShoppingBagLine, RiFileListLine } from 'react-icons/ri';
+import { CgProfile } from "react-icons/cg";
 
 const SidebarContext = createContext();
 
@@ -50,7 +52,7 @@ const Sidebar = () => {
         <SidebarContext.Provider value={{ expanded }}>
           <ul className="flex-1 space-y-4">
             {categories.length > 0 ? (
-              categories.map((category, index) => (
+              categories.map((category) => (
                 <SidebarItem key={category.id} text={category.name} id={category.id} />
               ))
             ) : (
@@ -65,14 +67,18 @@ const Sidebar = () => {
 
 const SidebarItem = ({ text, id }) => {
   const { expanded } = useContext(SidebarContext);
+  const location = useLocation();
+  const isActive = location.search.includes(`categoryId=${id}`);
 
   return (
-    <li className="relative flex items-center py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group">
+    <li
+      className={`relative flex items-center text-gray-700 py-2 px-3 my-1 font-medium rounded-md cursor-pointer transition-colors group hover:bg-gray-300 ${
+        isActive ? "bg-gray-300 text-purple-500" : ""
+      }`}
+    >
       <Link
         to={`/store?categoryId=${id}`}
-        className={`text-lg text-purple-400 hover:bg-primary w-full transition-all ${
-          expanded ? "block" : "hidden"
-        }`}
+        className={`text-lg ${expanded ? "block" : "hidden"} hover:text-white flex items-center w-full transition-all`}
       >
         {text}
       </Link>
